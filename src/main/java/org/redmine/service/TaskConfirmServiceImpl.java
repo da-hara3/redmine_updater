@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.redmine.utils.ReadSettingUtils;
+import org.redmine.utils.RedMineAPIUtils;
 
 import com.opencsv.CSVWriter;
 
@@ -41,11 +43,11 @@ public class TaskConfirmServiceImpl implements IRedmineService {
 
 	private List<String> getTicketList() {
 		System.out.println("start: getTicketList");
-		
+
 		List<String> ticektList = new ArrayList<>();
 		try {
 			URL url = new URL(
-					"http://hue-redmine/redmine/projects/x-asset/issues.json?query_id=4903&limit=5&key=5f1da9cfa909ad3b52444aafdb363c08366c731b");
+					"http://hue-redmine/redmine/projects/x-asset/issues.json?query_id=4903&limit=5&key=" + ReadSettingUtils.getRedmineUpdaterSetting().getApiKey());
 			HttpURLConnection urlConn = (HttpURLConnection) url
 					.openConnection();
 			urlConn.setRequestMethod("GET");
@@ -85,7 +87,7 @@ public class TaskConfirmServiceImpl implements IRedmineService {
 			URL url = new URL(
 					"http://hue-redmine/redmine/issues/"
 							+ ticketId
-							+ ".json?format=xml&include=children&key=5f1da9cfa909ad3b52444aafdb363c08366c731b");
+							+ ".json?format=xml&include=children&key=");
 			HttpURLConnection urlConn = (HttpURLConnection) url
 					.openConnection();
 			urlConn.setRequestMethod("GET");
@@ -104,7 +106,7 @@ public class TaskConfirmServiceImpl implements IRedmineService {
 					issuseObjct = issuseObjct.getJSONObject("issue");
 					displayList.add(String.valueOf(issuseObjct.getLong("id")));
 					displayList.add(issuseObjct.getString("subject"));
-					
+
 					if (issuseObjct.isNull("children")){
 						str = br.readLine();
 						continue;
@@ -137,7 +139,7 @@ public class TaskConfirmServiceImpl implements IRedmineService {
 			URL url = new URL(
 					"http://hue-redmine/redmine/issues/"
 							+ ticketId
-							+ ".json?format=xml&include=children&key=5f1da9cfa909ad3b52444aafdb363c08366c731b");
+							+ ".json?format=xml&include=children&key="  + ReadSettingUtils.getRedmineUpdaterSetting().getApiKey());
 			HttpURLConnection urlConn = (HttpURLConnection) url
 					.openConnection();
 			urlConn.setRequestMethod("GET");
